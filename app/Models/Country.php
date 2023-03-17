@@ -16,7 +16,8 @@ class Country extends Model
 
 
     /**
-     * @todo Create new country
+     * Create new country
+     * 
      * @param int $userId
      * @param array $data
      * @return int
@@ -48,11 +49,12 @@ class Country extends Model
 
 
     /**
-     * @todo Get all countries
+     * Get all countries
+     * 
      * @param int $userId
-     * @return array
+     * @return array/null
      */
-    public function getAllCountries(int $userId): array
+    public function getAllCountries(int $userId): ?array
     {
         return DB::table("countries")
                             ->join("users_countries", "countries.id", "users_countries.country_id")
@@ -63,12 +65,13 @@ class Country extends Model
 
 
     /**
-     * @todo Get country by id
+     * Get country by id
+     * 
      * @param int $userId
      * @param int $countryId
-     * @return object
+     * @return object/null
      */
-    public function getCountryById(int $userId, int $countryId): object 
+    public function getCountryById(int $userId, int $countryId): ?object 
     {
         return DB::table("countries")
                             ->join("users_countries", "countries.id", "users_countries.country_id")
@@ -80,7 +83,8 @@ class Country extends Model
 
 
     /**
-     * @todo Update country
+     * Update country
+     * 
      * @param int $userId
      * @param int $countryId
      * @param array $data
@@ -97,7 +101,8 @@ class Country extends Model
 
 
     /**
-     * @todo Delete country
+     * Delete country
+     * 
      * @param int $userId
      * @param int $countryId
      * @return int

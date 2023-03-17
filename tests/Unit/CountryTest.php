@@ -9,42 +9,46 @@ use Tests\TestCase;
 
 class CountryTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
-    public function testCreateCountry()
+
+    private static function createUserAndCountry()
     {
         $faker = \Faker\Factory::create();
-
         $user = User::factory()->create();
-        
+
         $data = [
             'name' => $faker->country(),
             'iso' => $faker->countryCode(),
         ];
 
         $country = new Country();
-        $id = $country->createCountry($user->id, $data);
+        $countryId = $country->createCountry($user->id, $data);
 
-        $this->assertTrue($id > 0);
+        return ['userId' => $user->id, 'countryId' => $countryId];
+    }
+
+
+    public function testCreateCountry()
+    {
+        $data = self::createUserAndCountry();
+
+        $this->assertTrue($data['countryId'] > 0);
     }
 
 
     public function testUpdateCountry()
     {
+        $created = self::createUserAndCountry();
+
         $faker = \Faker\Factory::create();
-
-        $model = new User();
-        $user = $model::take(1)->first();
-
         $data = [
             'name' => $faker->country(),
             'iso' => $faker->countryCode(),
         ];
 
         $country = new Country();
-        $c = $country::take(1)->first();
-
-        $success = $country->updateCountry($user->id, $c->id, $data);
+        $success = $country->updateCountry($created['userId'], $created['countryId'], $data);
 
         $this->assertEquals(1, $success);
     }
@@ -52,11 +56,10 @@ class CountryTest extends TestCase
 
     public function testGetAllCounties()
     {
-        $model = new User();
-        $user = $model::take(1)->first();
+        $created = self::createUserAndCountry();
 
         $country = new Country();
-        $countries = $country->getAllCountries($user->id);
+        $countries = $country->getAllCountries($created['userId']);
 
         $this->assertTrue(count($countries) > 0);
     }
@@ -64,31 +67,21 @@ class CountryTest extends TestCase
 
     public function testGetCountryById()
     {
-        $model = new User();
-        $user = $model::take(1)->first();
+        $created = self::createUserAndCountry();
 
         $country = new Country();
-        $countries = $country->getAllCountries($user->id);
-        
-        $c = $countries[0];
+        $selectedCountry = $country->getCountryById($created['userId'], $created['countryId']);
 
-        $selectedCountry = $country->getCountryById($user->id, $c->id);
-
-        $this->assertEquals($c->id, $selectedCountry->id);
+        $this->assertEquals($created['countryId'], $selectedCountry->id);
     }
 
 
     public function testDeleteCountry()
     {
-        $model = new User();
-        $user = $model::take(1)->first();
+        $created = self::createUserAndCountry();
 
         $country = new Country();
-        $countries = $country->getAllCountries($user->id);
-        
-        $c = $countries[0];
-
-        $deleted = $country->deleteCountry($user->id, $c->id);
+        $deleted = $country->deleteCountry($created['userId'], $created['countryId']);
 
         $this->assertEquals(1, $deleted);
     }
