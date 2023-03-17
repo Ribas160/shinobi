@@ -31,6 +31,8 @@ class CountryTest extends TestCase
     
     public function testIndex()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $created = self::createUserAndCountry();
 
         $response = $this->actingAs($created['user'])->get('/');
@@ -40,6 +42,8 @@ class CountryTest extends TestCase
 
     public function testStore()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $faker = \Faker\Factory::create();
         $user = User::factory()->create();
 
@@ -60,6 +64,8 @@ class CountryTest extends TestCase
 
     public function testUpdate()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $created = self::createUserAndCountry();
         
         $faker = \Faker\Factory::create();
@@ -80,6 +86,8 @@ class CountryTest extends TestCase
 
     public function testDestroy()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $created = self::createUserAndCountry();
 
         $response = $this->actingAs($created['user'])->delete('/country/' . $created['countryId']);

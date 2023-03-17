@@ -13,6 +13,8 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $response = $this->get('/login');
 
         $response->assertStatus(200);
@@ -20,6 +22,8 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $user = User::factory()->create();
 
         $response = $this->post('/login', [
@@ -33,6 +37,8 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_not_authenticate_with_invalid_password()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+        
         $user = User::factory()->create();
 
         $this->post('/login', [

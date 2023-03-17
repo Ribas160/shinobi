@@ -14,6 +14,8 @@ class PasswordResetTest extends TestCase
 
     public function test_reset_password_link_screen_can_be_rendered()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         $response = $this->get('/forgot-password');
 
         $response->assertStatus(200);
@@ -21,6 +23,8 @@ class PasswordResetTest extends TestCase
 
     public function test_reset_password_link_can_be_requested()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         Notification::fake();
 
         $user = User::factory()->create();
@@ -32,6 +36,8 @@ class PasswordResetTest extends TestCase
 
     public function test_reset_password_screen_can_be_rendered()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+
         Notification::fake();
 
         $user = User::factory()->create();
@@ -49,6 +55,8 @@ class PasswordResetTest extends TestCase
 
     public function test_password_can_be_reset_with_valid_token()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\BlockIpMiddleware::class);
+        
         Notification::fake();
 
         $user = User::factory()->create();
